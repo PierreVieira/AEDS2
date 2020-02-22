@@ -11,7 +11,7 @@ def media(lista):
     qtde_termos = 0
     for c in lista:
         qtde_termos += 1
-    return s
+    return s/qtde_termos
 
 
 if __name__ == '__main__':
