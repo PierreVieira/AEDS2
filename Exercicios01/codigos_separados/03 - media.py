@@ -1,17 +1,15 @@
-from Exercicios01.ex01 import soma
-
-
 def media(lista):
     """
     @author: Pierre Vieira
     :param lista: Lista de valores inteiros numéricos.
     :return: Média dos valores da lista.
     """
-    s = soma(lista)  # Faz a soma dos elementos da lista
+    s = 0
     qtde_termos = 0
-    for c in lista:
-        qtde_termos += 1
-    return s/qtde_termos
+    for num in lista:  # Para cada número na lista
+        s += num  # Adicione esse número à soma
+        qtde_termos += 1  # A quantidade de termos é incrementada
+    return s/qtde_termos  # A média é a soma dividida pela quantidade de termos
 
 
 if __name__ == '__main__':
