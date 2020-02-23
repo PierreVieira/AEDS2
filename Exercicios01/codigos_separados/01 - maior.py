@@ -9,5 +9,6 @@ def maior(a, b):
 
 
 if __name__ == '__main__':
-    a, b = map(int, input('Informe dois valores em sequência: ').split())
-    print(f'O maior valor entre {a} e {b} é {maior(a, b)}')
+    print(f'\033[1;34m1º teste (a > b): \033[m{maior(5, 2)}')
+    print(f'\033[1;34m2º teste (a < b): \033[m{maior(8, 5)}')
+    print(f'\033[1;34m3º teste (a = b): \033[m{maior(3, 3)}')

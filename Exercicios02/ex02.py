@@ -90,7 +90,7 @@ class Biblioteca():
         dicionario = {}  # Dicionário que irá ter como key o nome do autor e value a lista de livros que ele já escreveu
         for nome in nomes:  # Para cada nome na lista de nomes
             lista_livros_autor = []  # Cria uma lista vazia que irá armazenar os livros de cada autor
-            for livro in livros:  # Ṕara cada livro na lista de livros
+            for livro in livros:  # Para cada livro na lista de livros
                 if nome in livro.autores:  # Se o nome está incluso na lista de autores do livro
                     lista_livros_autor.append(livro)  # Adicione esse livro na lista de livros
             dicionario.update({nome: lista_livros_autor})  # Adicione ao dicionário um campo em que a o nome do autor
