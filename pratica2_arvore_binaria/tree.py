@@ -68,7 +68,7 @@ class Node:
             return False, cont_search  # Retorne falso e o valor de cont_search
         return False  # Retorne falso
 
-    def to_sorted_array(self, arr_result: List = None, node: "Node" = None) -> List:
+    def to_sorted_array(self, arr_result: List = None) -> List:
         """
         Aplica o caminhamento em ordem infixa.
         :param node: próximo nó (aplicação recursiva)
@@ -77,32 +77,28 @@ class Node:
         """
         if arr_result is None:  # Se o não foi informado o valor de arr_result
             arr_result = []  # arr_result começa como uma lista vazia
-        if node is None:  # Se o nó não foi informado como passagem de parâmetro
-            node = self  # O nó é o informado pelo usuário em self
-        if node.left:  # Se há nó à esquerda
-            node.to_sorted_array(arr_result=arr_result, node=node.left)  # Desça pela esquerda
-        arr_result.append(node.key)  # O array adiciona o valor da raiz
-        if node.right:  # Se há nó à direita
-            node.to_sorted_array(arr_result=arr_result, node=node.right)  # Desça pela direita
+        if self.left:  # Se há nó à esquerda
+            self.left.to_sorted_array(arr_result=arr_result)  # Desça pela esquerda
+        arr_result.append(self.key)  # O array adiciona o valor da raiz
+        if self.right:  # Se há nó à direita
+            self.right.to_sorted_array(arr_result=arr_result)  # Desça pela direita
         return arr_result  # Retorne o array (estará ordenado)
 
-    def max_depth(self, current_max_depth: int = 0, node: "Node" = None, alturas_raiz_folha: List = None) -> int:
+    def max_depth(self, current_max_depth: int = 0, alturas_raiz_folha: List = None) -> int:
         """
-        :param node: nó atual.
+        Faz basicamente um caminho prefixo em busca da maior altura.
+        :param alturas_raiz_folha: Lista de alturas da raiz até a folha.
         :param current_max_depth: Valor representando a maior distancia até então ao chamar pela primeira vez,
         não é necessário usa-lo.
         :return: maior distancia entre o nodo raiz e a folha.
         """
         if alturas_raiz_folha is None:  # Se não foi informado a lista de alturas
             alturas_raiz_folha = []
-        if node is None:  # Se o nó não foi informado como passagem de parâmetro
-            node = self  # O nó é o informado pelo usuário em self
-        if node.left:  # Se há nó à esquerda
-            node.max_depth(current_max_depth + 1, node=node.left, alturas_raiz_folha=alturas_raiz_folha)  # Desça
+        alturas_raiz_folha.append(current_max_depth)  # Caminho prefixo
+        if self.left:  # Se há nó à esquerda
+            self.left.max_depth(current_max_depth + 1, alturas_raiz_folha=alturas_raiz_folha)  # Desça
             # pela esquerda
-        alturas_raiz_folha.append(current_max_depth)
-        current_max_depth = 0  # O tamanho máximo zera
-        if node.right:  # Se há nó à direita
-            node.max_depth(current_max_depth + 1, node=node.right, alturas_raiz_folha=alturas_raiz_folha)  # Desça
+        if self.right:  # Se há nó à direita
+            self.right.max_depth(current_max_depth + 1, alturas_raiz_folha=alturas_raiz_folha)  # Desça
             # pela direita
         return max(alturas_raiz_folha) + 1  # Retorne a maior distância entre a raiz e a folha mais distante
