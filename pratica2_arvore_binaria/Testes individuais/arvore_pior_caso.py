@@ -6,8 +6,8 @@ for valor in lista_valores_nos[1:]:  # Para cada valor na lista de valores dos n
 achou, quantidade_de_chamadas = raiz.search(8, retornar_cont_search=True)
 print('\033[1;36m' + '='*22 + ' PIOR CASO ' + '='*22+'\033[m')
 if achou:
-    print(f'\033[0;32mO valor foi encontrado após\033[m \033[1;31m{quantidade_de_chamadas}\033[m \033[0;32mchamadas do método '
-          f'search\033[m')
+    print(f'\033[0;32mO valor foi encontrado após\033[m \033[1;31m{quantidade_de_chamadas}\033[m \033[0;32mchamadas '
+          f'do método search\033[m')
 else:
     print(f'\033[0;32mO valor pesquisado não foi enxontrado.\033[m\n\033[0;32mO método search foi executado\033[m '
           f'\033[1;31m{quantidade_de_chamadas}\033[m \033[0;32mvezes\033[m')
