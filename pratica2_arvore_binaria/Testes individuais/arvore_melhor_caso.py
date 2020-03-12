@@ -1,10 +1,15 @@
 from pratica2_arvore_binaria.tree import Node
-lista_valores_nos = [i for i in range(8, -1, -1)]  # Cria uma lista que vai de 1 até 0 em intervalo fechado
-raiz = Node(lista_valores_nos[0])  # A raiz pega o valor 8
-for valor in lista_valores_nos[1:]:  # Para cada valor na lista de valores dos nós (começando do segundo)
-    raiz.insert(valor)  # Insira esse novo nó na àrvore
-encontrou_valor_8, quantidade_de_chamadas = raiz.search(8, retornar_cont_search=True)
-if encontrou_valor_8:  # Verifica se o valor 8 foi encontrado na àrvore
-    print(f'O valor 8 foi encontrado após {quantidade_de_chamadas} chamadas do método search')
-else:  # Se não foi encontrado
-    print(f'O valor 8 não existe na àrvore.')
+no = Node(5)
+for value in range(1, 5):  # Vai de 1 até 4 em intervalo fechado
+    no.insert(value)  # Insere o valor
+for value in range(6, 9):  # Vai de 6 até 8 em intervalo fechado
+    no.insert(value)  # Insere o valor
+achou, qtde_execucoes = no.search(5, retornar_cont_search=True)  # Melhor caso da busca ocorre quando estamos
+# pesquisando na raiz
+print('\033[1;36m' + '='*21 + ' MELHOR CASO ' + '='*21+'\033[m')
+if achou:
+    print(f'\033[0;32mO valor foi encontrado após\033[m \033[1;31m{qtde_execucoes}\033[m \033[0;32mchamadas do método '
+          f'search\033[m')
+else:
+    print(f'\033[0;32mO valor pesquisado não foi enxontrado.\033[m\n\033[0;32mO método search foi executado\033[m '
+          f'\033[1;31m{qtde_execucoes}\033[m \033[0;32mvezes\033[m')
