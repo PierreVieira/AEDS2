@@ -53,24 +53,13 @@ class AVL:
 
     def rotacao_esquerda(self, raiz_sub_arvore):
         """
-        Caso mais simples (lista encadeada de 3 nós, logo filho da direita não tem filho da esquerda):
-        *Filho da direita vira raiz nova.
-        *Raiz original vira filho da esquerda
-
-        Caso mais complexo (filho da direita já tem filho da esquerda):
         *Filho da direita vira raiz.
         *Filho da esquerda do filho da direita vira filho da direita do filho da esquerda.
         *A raiz original vira filho da esquerda da nova raiz.
         :param raiz_sub_arvore: nó em que será aplicada a rotação.
         :return: None
         """
-        if raiz_sub_arvore.direita.esquerda is None:  # Se o filho da direita não tem filho da esquerda (estamos no
-            # caso simples)
-            nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda = raiz_sub_arvore.direita, raiz_sub_arvore
-            nova_raiz_sub_arvore.esquerda.direita = None  # Removendo a referência antiga dos filhos do novo nó à
-            # esquerda da raiz
-        else:  # Senão quer dizer que o filho da direita tem filho da esquerda
-            nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda, nova_raiz_sub_arvore.esquerda.direita = raiz_sub_arvore.direita, raiz_sub_arvore, raiz_sub_arvore.direita.esquerda
+        nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda, nova_raiz_sub_arvore.esquerda.direita = raiz_sub_arvore.direita, raiz_sub_arvore, raiz_sub_arvore.direita.esquerda
         if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
             nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
         if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
@@ -80,24 +69,13 @@ class AVL:
 
     def rotacao_direita(self, raiz_sub_arvore):
         """
-        Caso mais simples (lista encadeada de 3 nós, logo filho da esquerda não tem filho da direita):
-        *Filho da esquerda vira raiz.
-        *Raiz original vira filho da direita
-
-        Caso mais complexo (filho da esquerda já tem filho da direita):
         *Filho da esquerda vira raiz.
         *Filho da direita do filho da esquerda vira filho da esquerda do filho da direita.
         *A raiz original vira filho da direita da nova raiz.
         :param raiz_sub_arvore: nó em que será aplicada a rotação.
         :return: None
         """
-        if raiz_sub_arvore.esquerda.direita is None:  # Se o filho da esquerda não tem filho da direita (estamos no
-            # caso simples)
-            nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita = raiz_sub_arvore.esquerda, raiz_sub_arvore
-            nova_raiz_sub_arvore.direita.esquerda = None  # Removendo a referência antiga dos filhos do novo nó à
-            # direita da raiz
-        else:  # Senão quer dizer que o filho da esquerda tem filho da direita
-            nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita, nova_raiz_sub_arvore.direita.esquerda = raiz_sub_arvore.esquerda, raiz_sub_arvore, raiz_sub_arvore.esquerda.direita
+        nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita, nova_raiz_sub_arvore.direita.esquerda = raiz_sub_arvore.esquerda, raiz_sub_arvore, raiz_sub_arvore.esquerda.direita
         if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
             nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
         if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
