@@ -136,7 +136,7 @@ class AVL:
         raiz_sub_arvore.atualiza_altura()
 
         # Rebalanceia a árvore de tal forma que o equilibrio sempre fique entre -1 e 1
-        # Caso 1 - ??
+        # Caso 1 - Árvore desequilibrada para esquerda e o nó a ser inserido é menor qe o filho à esquerda
         if raiz_sub_arvore.equilibrio > 1 and chave < raiz_sub_arvore.esquerda.chave:
             # Deve ser feita uma rotação simples à direita
             arvore_aux = AVL(raiz_sub_arvore)
