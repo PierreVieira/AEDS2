@@ -18,8 +18,10 @@ class TestAVL(unittest.TestCase):
 
     def arvore_tres_niveis_test(self, nova_raiz, arr_nos_esperados):
         self.assertEqual(nova_raiz.chave, arr_nos_esperados[0], f"A nova raiz não é a {nova_raiz.chave}")
+
         self.assertEqual(nova_raiz.esquerda.chave, arr_nos_esperados[1], "Referencia a esquerda da raiz incorreta")
         self.assertEqual(nova_raiz.direita.chave, arr_nos_esperados[2], "Referencia a direita da raiz incorreta")
+
         self.assertSegundoNivel(nova_raiz.esquerda, arr_nos_esperados[3:5], "esquerda")
         self.assertSegundoNivel(nova_raiz.direita, arr_nos_esperados[5:7], "direita")
 
@@ -51,7 +53,6 @@ class TestAVL(unittest.TestCase):
         nova_raiz = avl.rotacao_esquerda(arr_nos[0])
         self.atualiza_altura_test(arr_nos, nova_raiz)
 
-        avl = AVL(nova_raiz)
         arr_nos_esperados = [15, 13, 17, 6, 14, None, 18]  # busca em largura na arvore
         self.arvore_tres_niveis_test(nova_raiz, arr_nos_esperados)
 
@@ -109,9 +110,6 @@ class TestAVL(unittest.TestCase):
         self.arvore_tres_niveis_test(nova_raiz, arr_nos_esperados)
 
     def test_insere(self):
-        root = No(10)
-        avl = AVL(root)
-
         root = No(10)
         avl = AVL(root)
 

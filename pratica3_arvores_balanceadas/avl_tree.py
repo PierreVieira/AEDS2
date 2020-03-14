@@ -23,12 +23,11 @@ class No:
         return self.altura_subarvore_esquerda - self.altura_subarvore_direita
 
     def atualiza_altura(self):
-        self.altura = 1 + max(self.altura_subarvore_esquerda,
-                              self.altura_subarvore_direita)
+        self.altura = 1 + max(self.altura_subarvore_esquerda, self.altura_subarvore_direita)
 
     # Definindo str e repr para facilitar no debug
     def __str__(self):
-        return str(self.chave)
+        return '{chave = ' + str(self.chave) + ', altura = ' + str(self.altura) + '}'
 
     def __repr__(self):
         return self.__str__()
@@ -54,34 +53,69 @@ class AVL:
 
     def rotacao_esquerda(self, raiz_sub_arvore):
         """
-        *Filho da direita vira nova raiz.
+        Caso mais simples (lista encadeada de 3 nós, logo filho da direita não tem filho da esquerda):
+        *Filho da direita vira raiz nova.
+        *Raiz original vira filho da esquerda
+
+        Caso mais complexo (filho da direita já tem filho da esquerda):
+        *Filho da direita vira raiz.
         *Filho da esquerda do filho da direita vira filho da direita do filho da esquerda.
         *A raiz original vira filho da esquerda da nova raiz.
         :param raiz_sub_arvore: nó em que será aplicada a rotação.
         :return: None
         """
-        nova_raiz_sub_arvore = None
-        nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda, nova_raiz_sub_arvore.esquerda.direita, nova_raiz_sub_arvore.direita.esquerda = raiz_sub_arvore.direita, raiz_sub_arvore, raiz_sub_arvore.direita.esquerda, raiz_sub_arvore.esquerda
-        # Matando as referências de troca
-        nova_raiz_sub_arvore.direita.esquerda = None
-
-        # Atualizando as alturas
-        nova_raiz_sub_arvore.esquerda.atualiza_altura()
-        nova_raiz_sub_arvore.direita.atualiza_altura()
-        nova_raiz_sub_arvore.atualiza_altura()
-        return nova_raiz_sub_arvore
+        if raiz_sub_arvore.direita.esquerda is None:  # Se o filho da direita não tem filho da esquerda (estamos no
+            # caso simples)
+            nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda = raiz_sub_arvore.direita, raiz_sub_arvore
+            nova_raiz_sub_arvore.esquerda.direita = None  # Removendo a referência antiga dos filhos do novo nó à
+            # esquerda da raiz
+        else:  # Senão quer dizer que o filho da direita tem filho da esquerda
+            nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda, nova_raiz_sub_arvore.esquerda.direita = raiz_sub_arvore.direita, raiz_sub_arvore, raiz_sub_arvore.direita.esquerda
+        if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
+            nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
+        if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
+            nova_raiz_sub_arvore.direita.atualiza_altura()  # Atualize a altura do nó à direita
+        nova_raiz_sub_arvore.atualiza_altura()  # Atualize a altura da raiz
+        return nova_raiz_sub_arvore  # Retorne a nova raíz da sub árvore
 
     def rotacao_direita(self, raiz_sub_arvore):
-        nova_raiz_sub_arvore = None
-        return nova_raiz_sub_arvore
+        """
+        Caso mais simples (lista encadeada de 3 nós, logo filho da esquerda não tem filho da direita):
+        *Filho da esquerda vira raiz.
+        *Raiz original vira filho da direita
+
+        Caso mais complexo (filho da esquerda já tem filho da direita):
+        *Filho da esquerda vira raiz.
+        *Filho da direita do filho da esquerda vira filho da esquerda do filho da direita.
+        *A raiz original vira filho da direita da nova raiz.
+        :param raiz_sub_arvore: nó em que será aplicada a rotação.
+        :return: None
+        """
+        if raiz_sub_arvore.esquerda.direita is None:  # Se o filho da esquerda não tem filho da direita (estamos no
+            # caso simples)
+            nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita = raiz_sub_arvore.esquerda, raiz_sub_arvore
+            nova_raiz_sub_arvore.direita.esquerda = None  # Removendo a referência antiga dos filhos do novo nó à
+            # direita da raiz
+        else:  # Senão quer dizer que o filho da esquerda tem filho da direita
+            nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita, nova_raiz_sub_arvore.direita.esquerda = raiz_sub_arvore.esquerda, raiz_sub_arvore, raiz_sub_arvore.esquerda.direita
+        if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
+            nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
+        if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
+            nova_raiz_sub_arvore.direita.atualiza_altura()  # Atualize a altura do nó à direita
+        nova_raiz_sub_arvore.atualiza_altura()
+        return nova_raiz_sub_arvore  # Retorne a nova raíz da sub árvore
 
     def rotacao_dupla_esquerda(self, raiz_sub_arvore):
-
-        return None
+        arvore_aux = AVL(raiz_sub_arvore.direita)
+        raiz_sub_arvore.direita = arvore_aux.rotacao_direita(arvore_aux.raiz)
+        nova_raiz_sub_arvore = AVL(raiz_sub_arvore).rotacao_esquerda(raiz_sub_arvore)
+        return nova_raiz_sub_arvore
 
     def rotacao_dupla_direita(self, raiz_sub_arvore):
-
-        return None
+        arvore_aux = AVL(raiz_sub_arvore.esquerda)
+        raiz_sub_arvore.esquerda = arvore_aux.rotacao_esquerda(arvore_aux.raiz)
+        nova_raiz_sub_arvore = AVL(raiz_sub_arvore).rotacao_direita(raiz_sub_arvore)
+        return nova_raiz_sub_arvore
 
     def insere(self, chave):
         self.raiz = self._insere(chave, self.raiz)
@@ -104,19 +138,27 @@ class AVL:
         # Rebalanceia a árvore de tal forma que o equilibrio sempre fique entre -1 e 1
         # Caso 1 - ??
         if raiz_sub_arvore.equilibrio > 1 and chave < raiz_sub_arvore.esquerda.chave:
-            return None
+            # Deve ser feita uma rotação simples à direita
+            arvore_aux = AVL(raiz_sub_arvore)
+            raiz_sub_arvore = arvore_aux.rotacao_direita(raiz_sub_arvore)
 
-        # Caso 2 - ??
-        if raiz_sub_arvore.equilibrio < -1 and chave > raiz_sub_arvore.direita.chave:
-            return None
+        # Caso 2 - Árvore está grande para a direita e a chave foi inserida à direita do nó da direita
+        elif raiz_sub_arvore.equilibrio < -1 and chave > raiz_sub_arvore.direita.chave:
+            # Deve ser feita uma rotação simples à esquerda
+            arvore_aux = AVL(raiz_sub_arvore)
+            raiz_sub_arvore = arvore_aux.rotacao_esquerda(raiz_sub_arvore)
 
-        # Caso 3 - ??
-        if raiz_sub_arvore.equilibrio > 1 and chave > raiz_sub_arvore.esquerda.chave:
-            return None
+        # Caso 3 - Árvore desequilibrada para esquerda e o nó a ser inserido é maior qe o filho à esquerda
+        elif raiz_sub_arvore.equilibrio > 1 and chave > raiz_sub_arvore.esquerda.chave:
+            # Deve ser feita uma rotação dupla direita
+            arvore_aux = AVL(raiz_sub_arvore)
+            raiz_sub_arvore = arvore_aux.rotacao_dupla_direita(raiz_sub_arvore)
 
-        # Caso 4 - ??
-        if raiz_sub_arvore.equilibrio < -1 and chave < raiz_sub_arvore.direita.chave:
-            return None
+        # Caso 4 - Árvore desequilibrada para a direita e o nó a ser inserido é à esquerda do filho à direita da raiz
+        elif raiz_sub_arvore.equilibrio < -1 and chave < raiz_sub_arvore.direita.chave:
+            # Deve ser feita uma rotação dupla esquerda
+            arvore_aux = AVL(raiz_sub_arvore)
+            raiz_sub_arvore = arvore_aux.rotacao_dupla_esquerda(raiz_sub_arvore)
 
         # caso já esteja equilibrado, a raiz subarvore não é modificada
         return raiz_sub_arvore
