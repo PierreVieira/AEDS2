@@ -35,7 +35,7 @@ class TestAVL(unittest.TestCase):
         self.assertNotEqual(nova_raiz.altura, 1000, "A atualização da altura está incorreta")
         self.assertNotEqual(arr_nos[0].altura, 1000, "A atualização da altura está incorreta")
         [self.assertEqual(no.altura, 1000, "A atualização da altura está incorreta") for no in arr_nos if
-         no.chave != arr_nos[0].chave and no.chave != nova_raiz.chave]
+         no.chave != arr_nos[0].chave and no.chave != nova_raiz.chave]  # Acho que aqui está errado
 
     def test_rotacao_esquerda(self):
         # constroi a arvore teste
