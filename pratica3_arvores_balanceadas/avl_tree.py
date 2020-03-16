@@ -62,8 +62,8 @@ class AVL:
         nova_raiz_sub_arvore, nova_raiz_sub_arvore.esquerda, nova_raiz_sub_arvore.esquerda.direita = raiz_sub_arvore.direita, raiz_sub_arvore, raiz_sub_arvore.direita.esquerda
         if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
             nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
-        if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
-            nova_raiz_sub_arvore.direita.atualiza_altura()  # Atualize a altura do nó à direita
+        # if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
+        #     nova_raiz_sub_arvore.direita.atualiza_altura()  # Atualize a altura do nó à direita
         nova_raiz_sub_arvore.atualiza_altura()  # Atualize a altura da raiz
         return nova_raiz_sub_arvore  # Retorne a nova raíz da sub árvore
 
@@ -76,8 +76,8 @@ class AVL:
         :return: None
         """
         nova_raiz_sub_arvore, nova_raiz_sub_arvore.direita, nova_raiz_sub_arvore.direita.esquerda = raiz_sub_arvore.esquerda, raiz_sub_arvore, raiz_sub_arvore.esquerda.direita
-        if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
-            nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
+        # if nova_raiz_sub_arvore.esquerda:  # Se há filho à esquerda da raiz
+        #     nova_raiz_sub_arvore.esquerda.atualiza_altura()  # Atualize a altura do nó à esquerda
         if nova_raiz_sub_arvore.direita:  # Se há filho à direita da raiz
             nova_raiz_sub_arvore.direita.atualiza_altura()  # Atualize a altura do nó à direita
         nova_raiz_sub_arvore.atualiza_altura()
