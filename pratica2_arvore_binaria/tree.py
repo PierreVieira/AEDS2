@@ -70,12 +70,11 @@ class Node:
 
     def to_sorted_array(self, arr_result: List = None) -> List:
         """
-        Aplica o caminhamento em ordem infixa.
-        :param node: próximo nó (aplicação recursiva)
+        Aplica o caminhamento em ordem infixa
         :param arr_result: Parametro com os itens já adicionados.
         :return: Lista com os elementos ordenados.
         """
-        if arr_result is None:  # Se o não foi informado o valor de arr_result
+        if arr_result is None:  # Se não foi informado o valor de arr_result
             arr_result = []  # arr_result começa como uma lista vazia
         if self.left:  # Se há nó à esquerda
             self.left.to_sorted_array(arr_result=arr_result)  # Desça pela esquerda
