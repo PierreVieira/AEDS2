@@ -1,4 +1,4 @@
-from desafio_arvore_b.arvore_b import Node
+from desafio_arvore_b.tree_b.arvore_b import Node
 
 
 def construir_lista_nos(*args):

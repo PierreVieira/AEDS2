@@ -1,7 +1,8 @@
-from desafio_arvore_b.arvore_b import *
+from desafio_arvore_b.tree_b.arvore_b import *
 from desafio_arvore_b.testes_individuais.funcoes_uteis_de_teste import *
+from desafio_arvore_b.tree_b.page import Page
 
-pagina = Page(lista_nos=construir_lista_nos(29))
+pagina = Page_b(lista_nos=construir_lista_nos(29))
 pagina.lista_nos[0].left = Page(4, lista_nos=construir_lista_nos(8, 15))
 pagina.lista_nos[0].right = Page(4, lista_nos=construir_lista_nos(37, 45, 60))
 pagina.lista_nos[0].left.lista_nos[0].left = Page(4, lista_nos=construir_lista_nos(1, 3, 4, 7))
