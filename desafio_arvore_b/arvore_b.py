@@ -54,7 +54,6 @@ class Page:
             raise MemoryError('Não é possível ter uma página com mais elementos do que permitido!')  # Erro
         self._lista_nos = lista_nos  # A lista de nós da página recebe a lista de nós informada
 
-
     def eh_possivel_inserir_na_pagina(self):
         """
         Informa se a página pode ter mais um nó dentro dela
