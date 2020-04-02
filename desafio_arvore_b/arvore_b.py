@@ -23,6 +23,11 @@ class Node:
     def __gt__(self, other):
         return self.value > other
 
+    def __eq__(self, other):
+        if type(other) == Node:
+            return self.value == other.value
+        return self.value == other
+
 
 class Page:
     def __init__(self, maximo_elementos: int = None, lista_nos: "List" = None):
@@ -63,9 +68,7 @@ class Page:
         :param no: nó a ser pesquisado na página
         :return: True se o nó está na pagina. False caso contrário
         """
-        if no in [e.value for e in self.lista_nos]:
-            return True
-        return False
+        return no in self.lista_nos
 
     def _insercao_simples_na_pagina(self, elemento, pagina_sem_pai: "Page" = None):
         """
@@ -169,13 +172,20 @@ class Arvore_b:
                     return self._insert_element(node, page=element.left, pagina_sem_pai=pagina_sem_pai)
                 else:
                     return self._insert_element(node, page=element.left)  # Insira na página à esquerda
-        try:  # Tente inserir o elemento na página recorrente
-            if pagina_sem_pai is not None:
-                page.inserir_elemento(node, pagina_sem_pai=pagina_sem_pai)
+        if page.lista_nos[-1].right and node > page.lista_nos[-1]:  # Se o elemento da última página tem filho à
+            # direita e o elemento que quero inserir é maior que o último eelemento da página recorrente
+            if pagina_sem_pai:
+                self._insert_element(node, page=page.lista_nos[-1].right, pagina_sem_pai=pagina_sem_pai)
             else:
-                page.inserir_elemento(node)  # Chama o método de inserção da página para inserir o valor nela
-        except MemoryError:  # Exceto se ela estiver cheia
-            self._inserir_elemento_em_nova_pagina(node, page)
+                self._insert_element(node, page=page.lista_nos[-1].right)
+        else:
+            try:  # Tente inserir o elemento na página recorrente
+                if pagina_sem_pai is not None:
+                    page.inserir_elemento(node, pagina_sem_pai=pagina_sem_pai)
+                else:
+                    page.inserir_elemento(node)  # Chama o método de inserção da página para inserir o valor nela
+            except MemoryError:  # Exceto se ela estiver cheia
+                self._inserir_elemento_em_nova_pagina(node, page)
 
     def _inserir_elemento_em_nova_pagina(self, node: "Node", page: "Page"):
         pagina_vazia = Page(
@@ -199,19 +209,3 @@ class Arvore_b:
         self.inserir_elemento(page.lista_nos.pop(), pagina_sem_pai=pagina_nao_mais_vazia)  # Joga o último elemento da
         # página antiga pra cima e esse elemento agora aponta para a página nova
 
-
-if __name__ == '__main__':
-    construir_lista_nos = lambda *args: list(Node(i) for i in args)
-    pagina = Page(lista_nos=construir_lista_nos(29))
-    pagina.lista_nos[0].left = Page(lista_nos=construir_lista_nos(8, 15))
-    pagina.lista_nos[0].right = Page(lista_nos=construir_lista_nos(37, 45, 60))
-    pagina.lista_nos[0].left.lista_nos[0].left = Page(lista_nos=construir_lista_nos(1, 3, 4, 7))
-    pagina.lista_nos[0].left.lista_nos[1].left = Page(lista_nos=construir_lista_nos(10, 12, 13, 14))
-    pagina.lista_nos[0].left.lista_nos[1].right = Page(lista_nos=construir_lista_nos(18, 20, 25))
-    pagina.lista_nos[0].right.lista_nos[0].left = Page(lista_nos=construir_lista_nos(30, 36))
-    pagina.lista_nos[0].right.lista_nos[1].left = Page(lista_nos=construir_lista_nos(40, 41, 42, 43))
-    pagina.lista_nos[0].right.lista_nos[2].left = Page(lista_nos=construir_lista_nos(51, 52))
-    pagina.lista_nos[0].right.lista_nos[2].right = Page(lista_nos=construir_lista_nos(70, 77, 83))
-    arvore_b = Arvore_b(pagina)
-    arvore_b.inserir_elemento(19)
-    print(arvore_b.elemento_na_arvore(11))
