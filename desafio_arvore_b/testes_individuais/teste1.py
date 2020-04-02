@@ -1,6 +1,6 @@
 from desafio_arvore_b.arvore_b import *
+from desafio_arvore_b.testes_individuais.funcoes_uteis_de_teste import *
 
-construir_lista_nos = lambda *args: list(Node(i) for i in args)
 pagina = Page(lista_nos=construir_lista_nos(29))
 pagina.lista_nos[0].left = Page(4, lista_nos=construir_lista_nos(8, 15))
 pagina.lista_nos[0].right = Page(4, lista_nos=construir_lista_nos(37, 45, 60))
@@ -15,6 +15,6 @@ arvore_b = Arvore_b(pagina)
 arvore_b.inserir_elemento(11)
 arvore_b.inserir_elemento(19)
 arvore_b.inserir_elemento(2)
-print('Pesquisa do 11 =', arvore_b.elemento_na_arvore(11))
-print('Pesquisa do 2 =', arvore_b.elemento_na_arvore(2))
-print('Pesquisa do 19 =', arvore_b.elemento_na_arvore(19))
+pesquisar_elemento(arvore_b, 11)
+pesquisar_elemento(arvore_b, 19)
+pesquisar_elemento(arvore_b, 2)
