@@ -1,6 +1,7 @@
 """
 Autor: Pierre Vieira
 """
+from typing import List
 
 
 class Node:
@@ -46,51 +47,56 @@ class Page:
                 # Um erro deve ser lançado
             lista_nos = []  # A lista de nós começa com vazio
         if maximo_elementos is not None:  # Se o usuário informou a lista de elementos
-            self._maximo_elementos = maximo_elementos  # O máximo de elementos é o valor informado pelo usuário
+            self._maximo_elementos = maximo_elementos  # O máximo de elementos é o value informado pelo usuário
         else:  # senão
             self._maximo_elementos = len(lista_nos)  # O máximo de elementos é o tamanho da lista de nós
         if len(lista_nos) > self._maximo_elementos:  # Se o tamanho da lista de nós é maior que o máximo de elmentos
             raise MemoryError('Não é possível ter uma página com mais elementos do que permitido!')  # Erro
         self._lista_nos = lista_nos  # A lista de nós da página recebe a lista de nós informada
 
-    def inserir_elemento(self, elemento: "Node", pagina_sem_pai: "Page" = None):
-        if len(self.lista_nos) < self._maximo_elementos:  # Se o tamanho atual da minha página for menor que o máximo
-            # permitido
-            if pagina_sem_pai is not None:
-                self._insercao_simples_na_pagina(elemento, pagina_sem_pai=pagina_sem_pai)
-            else:
-                self._insercao_simples_na_pagina(elemento)  # Faz a inserção do elemento na mesma página
-        else:
+
+    def eh_possivel_inserir_na_pagina(self):
+        """
+        Informa se a página pode ter mais um nó dentro dela
+        :return: True se é possível inserir, false se não é possível
+        """
+        return len(self.lista_nos) < self._maximo_elementos  # A inserção será possível quando o tamanho da página
+        # for menor que a quantidade máxima de elementos permitidos
+
+    def inserir_elemento(self, elemento: "Node"):
+        """
+        Insere um elemento na página
+        :param elemento: nó a ser inserido na página
+        :return: True se o objeto foi inserido, MemoryError se a página já estiver cheia
+        """
+        if self.eh_possivel_inserir_na_pagina():  # Se for possível inserir na página
+            self._insercao_simples_na_pagina(elemento)  # Faz a inserção do elemento na mesma página
+        else:  # Se não
             raise MemoryError('Não é possível inserir mais elementos nessa página')  # Erro
 
-    def contem_elemento(self, no):
+    def contem_elemento(self, no: "Node"):
         """
         :param no: nó a ser pesquisado na página
         :return: True se o nó está na pagina. False caso contrário
         """
         return no in self.lista_nos
 
-    def _insercao_simples_na_pagina(self, elemento, pagina_sem_pai: "Page" = None):
+    def _insercao_simples_na_pagina(self, elemento):
         """
         Adiciona o elemento na página recorrente e ordena a lista
         :param elemento: Elemento a ser inserido na página
         :return: None
         """
         self._lista_nos.append(elemento)  # Insere um elemento na página
-        self._lista_nos.sort(key=lambda no: no.value)  # Ordena a página pelo parâmetro de valor do nó
-        if pagina_sem_pai is not None:
-            self._atualizar_apontadores(
-                pagina_sem_pai=pagina_sem_pai)  # Faz a atualização dos apontadores dos nós igualando algumas
-            # referências
-        else:
-            self._atualizar_apontadores()
+        self._lista_nos.sort(key=lambda no: no.value)  # Ordena a página pelo parâmetro de value do nó
+        self._atualizar_apontadores()
 
-    def _atualizar_apontadores(self, pagina_sem_pai: "Page" = None):
+    def _atualizar_apontadores(self):
+        """
+        Atualiza os apontadores dos nós
+        :return: None
+        """
         for c in range(len(self.lista_nos) - 1):
-            if self.lista_nos[c + 1].right is None and self.lista_nos[c + 1].left is None:  # Se o próximo nó que
-                # estou passando não está com nenhum apontador
-                if pagina_sem_pai is not None:  # Se há uma página sem pai
-                    self.lista_nos[c + 1].right = pagina_sem_pai  # O próximo nó pega esse página sem pai
             self.lista_nos[c].right = self.lista_nos[c + 1].left  # O apontador da direita de um no a(n) é o
             # apontador da esquerda de um nó a(n-1)
 
@@ -114,98 +120,89 @@ class Page:
 
 
 class Arvore_b:
-    def __init__(self, raiz: "Page"):
+    def __init__(self, root: "Page"):
         """
-        :param raiz: a raíz é uma página
+        :param root: a raíz é uma página
         :return: None
         """
-        self.raiz = raiz
+        self.root = root
 
-    def elemento_na_arvore(self, valor, pagina_de_busca: "Page" = None) -> bool:
+    def elemento_na_arvore(self, value):
+        if type(value) != Node:  # Se o usuário não está pesquisando um nó
+            no = Node(value)  # Crie um novo nó com o value informado pelo usuário
+        else:  # Senão
+            no = value  # O nó é o nó informado pelo usuário
+        return self._elemento_na_arvore(no)  # Pesquise se o nó informado está na árvore
+
+    def _elemento_na_arvore(self, no, pagina_de_busca: "Page" = None) -> bool:
         """
         :param pagina_de_busca: página inicial em que será feita a busca.
-        :param valor: valor a ser pesquisado na árvore.
+        :param no: no a ser pesquisado na árvore.
         :return: True se achou o elemento, False caso contrário.
         """
         if pagina_de_busca is None:  # Se o usuário não informou a página de busca
-            pagina_de_busca = self.raiz  # A página de busca é a raíz
-        if pagina_de_busca.contem_elemento(Node(valor)):  # Se o elemento está na página de busca
+            pagina_de_busca = self.root  # A página de busca é a raíz
+        if pagina_de_busca.contem_elemento(no):  # Se o elemento está na página de busca
             return True
         # Senão, quer dizer que teremos que descer por algum lado
         for element in pagina_de_busca.lista_nos:
-            if valor < element:
+            if no < element:
                 if element.left:  # Se tem filho à esquerda
-                    return self.elemento_na_arvore(valor, element.left)  # Desce pela página da esquerda
+                    return self._elemento_na_arvore(no, element.left)  # Desce pela página da esquerda
                 return False  # Se o algoritmo chegou aqui então quer dizer que a árvore não tem o elemento de pesquisa
         # Se o algoritmo chegou até aqui quer dizer que o elemento não é menor que nenhum elemento daquela árvore
         if pagina_de_busca.lista_nos[-1].right is None:  # Se não há filho à direita
             return False  # Não existe o elemento de busca na árvore
-        return self.elemento_na_arvore(valor, pagina_de_busca.lista_nos[-1].right)  # Desce pela página da direita do
+        return self._elemento_na_arvore(no, pagina_de_busca.lista_nos[-1].right)  # Desce pela página da direita do
         # último nó da página
 
-    def inserir_elemento(self, valor, pagina_sem_pai: "Page" = None):
+    def inserir_elemento(self, value):
         """
         Faz a inserção de um nó em alguma página da árvore
-        :param pagina_sem_pai: página desalocada
         :return: None
         """
-        if not self.elemento_na_arvore(valor):
-            if pagina_sem_pai is not None:
-                self._insert_element(Node(valor), pagina_sem_pai=pagina_sem_pai)
-            else:
-                self._insert_element(Node(valor))
+        if type(value) != Node:  # Se o usuário não informou um nó a ser inserido
+            value = Node(value)  # O valor informado pelo usuário se transforma em um nó
+        node = value  # o nó pega o valor informado pelo usuário
+        if not self.elemento_na_arvore(value):  # Se o nó já não está na árvore
+            self._insert_node(node)  # Insira o nó
 
-    def _insert_element(self, node: "Node", page: "Page" = None, pagina_sem_pai: "Page" = None):
+    def _insert_node(self, node, page: "Page" = None):
         """
-        Método recursivo de inserção
-        :param node: Elemento a ser inserido na página recorrente
-        :param page: Página recorrente em que o elemento será inserido
+        :param node: nó a ser inserido na página
+        :param page: página recorrente
         :return: None
         """
-        if page is None:  # Se o método está sendo chamado pela primeira vez
-            page = self.raiz  # A página em que iremos tentar a inserção é a raíz
-        for element in page.lista_nos:
-            if node < element:  # Se o nó que quero inserir é menor que o elemento recorrente
-                if element.left is None:
-                    break
-                if pagina_sem_pai is not None:
-                    return self._insert_element(node, page=element.left, pagina_sem_pai=pagina_sem_pai)
-                else:
-                    return self._insert_element(node, page=element.left)  # Insira na página à esquerda
-        if page.lista_nos[-1].right and node > page.lista_nos[-1]:  # Se o elemento da última página tem filho à
-            # direita e o elemento que quero inserir é maior que o último eelemento da página recorrente
-            if pagina_sem_pai:
-                self._insert_element(node, page=page.lista_nos[-1].right, pagina_sem_pai=pagina_sem_pai)
-            else:
-                self._insert_element(node, page=page.lista_nos[-1].right)
-        else:
-            try:  # Tente inserir o elemento na página recorrente
-                if pagina_sem_pai is not None:
-                    page.inserir_elemento(node, pagina_sem_pai=pagina_sem_pai)
-                else:
-                    page.inserir_elemento(node)  # Chama o método de inserção da página para inserir o valor nela
-            except MemoryError:  # Exceto se ela estiver cheia
-                self._inserir_elemento_em_nova_pagina(node, page)
+        if page is None:  # Se é a primeira vez que estamos chamando esse método
+            page = self.root  # A página é a raiz
+        for element in page.lista_nos:  # Para cada elemento na página recorrente
+            if node < element:  # Se o nó que estou querendo inseriri é menor que o elemento
+                if element.left:  # Se tem página à esquerda
+                    return self._insert_node(node, element.left)  # Desce pra esquerda
+                try:  # Senão, tente
+                    page.inserir_elemento(node)  # Insira um nó na página recorrente
+                except MemoryError:  # Exceto se ocorrer um erro de memória na páina
+                    self._nova_pagina(node, page)  # Crie uma nova página e aloque o nó
+        if page.lista_nos[-1].right:  # Se tem página à direita do último nó na página
+            return self._insert_node(node, page.lista_nos[-1].right)  # Desce para a direita do último nó da página
 
-    def _inserir_elemento_em_nova_pagina(self, node: "Node", page: "Page"):
-        pagina_vazia = Page(
-            maximo_elementos=self.raiz.maximo_elementos)  # Cria uma página vazia com o mesmo tamanho da página
-        # recorrente.
-        pagina_vazia.lista_nos = [page.lista_nos.pop() for i in range(len(page.lista_nos) // 2)]
-        pagina_nao_mais_vazia = pagina_vazia
-        pagina_nao_mais_vazia.lista_nos.sort(key=lambda node: node.value)
-        # A linha anterior pegou metade dos elementos da página recorrente e jogou em outra página
-        if node < pagina_nao_mais_vazia.lista_nos[0]:  # Se o valor que estou querendo inserir é menor
-            # que o primeiro elemento da nova página
-            try:  # Tente inserir o elemento na página antiga
-                page.inserir_elemento(node)
-            except MemoryError:
-                print('A página continua cheia.')
-        else:  # Se ele é maior
-            try:  # Então insere na página nova
-                pagina_nao_mais_vazia.inserir_elemento(node)
-            except MemoryError:
-                print('A página nova está cheia')  # Situação impossível
-        self.inserir_elemento(page.lista_nos.pop(), pagina_sem_pai=pagina_nao_mais_vazia)  # Joga o último elemento da
-        # página antiga pra cima e esse elemento agora aponta para a página nova
-
+    def _nova_pagina(self, no: "Node", page: "Page"):
+        """
+        Esse método será responsável por dividir as páginas e realocar os ponteiros
+        :param no: nó a ser inserido na nova página
+        :return: None
+        """
+        elementos_nova_pagina = [page.lista_nos.pop() for i in range(len(page.lista_nos) // 2)]  # Pega metade dos
+        # elementos da página recorrente
+        nova_pagina = Page(page.maximo_elementos, elementos_nova_pagina)  # Cria uma nova página com esses elementos
+        if no < nova_pagina.lista_nos[0]:  # Se o nó é menor que o primeiro elemento da nova página
+            page.inserir_elemento(no)  # Insira o nó na página que agora está menor
+            no_q_vai_pra_cima = page.lista_nos.pop()  # O nó que vai pra cima é o último elemento dessa página
+            no_q_vai_pra_cima.right = nova_pagina  # O nó que vai pra cima recebe no apontador da direita uma nova
+            # página
+        else:  # Se for maior
+            nova_pagina.inserir_elemento(no)  # Insere o nó na nova página
+            no_q_vai_pra_cima = nova_pagina.lista_nos.pop(0)  # Remove o primerio elemento na nova página pra mandar
+            # ele pra cima
+            no_q_vai_pra_cima.right = nova_pagina  # O nó que vai pra cima recebe no apontador da direita a nova página
+        self._insert_node(no_q_vai_pra_cima)  # Insere na árvore o nó que vai pra cima
