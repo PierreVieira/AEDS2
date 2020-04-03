@@ -1,7 +1,15 @@
 class Ponteiro:
     def __init__(self, celula_cima=None, celula_baixo=None):
         self.celula_cima = celula_cima
-        self.celula_baixo = celula_baixo
+        self._celula_baixo = celula_baixo
+
+    @property
+    def celula_baixo(self):
+        return self._celula_baixo
+
+    @celula_baixo.setter
+    def celula_baixo(self, value):
+        self._celula_baixo = value
 
     def remover_referencia_de_cima(self):
         self.celula_cima = None

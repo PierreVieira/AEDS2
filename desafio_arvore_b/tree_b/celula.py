@@ -19,12 +19,10 @@ class Celula:
         return self.valor > other
 
     def __eq__(self, other):
-        if type(other) == Celula:
-            return self.valor == other.valor and self.ponteiro == other._ponteiro
         return self.valor == other
 
     def __str__(self):
-        return f'({self.valor}, {self.ponteiro})'
+        return f'{self.valor}'
 
     def __repr__(self):
         return self.__str__()
