@@ -15,7 +15,8 @@ class Page:
         for c in range(self.__qtde_ponteiros - 1):
             if self._lista_celulas[c].valor == -inf:
                 self._lista_celulas[c] = celula
-                return True
+                self._lista_celulas.sort(key=lambda celula: celula.valor)
+                return None
         raise MemoryError('Não foi possível inserir a célula. PÁGINA CHEIA!')
 
     def remover_celula(self, celula: Celula):
