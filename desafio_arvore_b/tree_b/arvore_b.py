@@ -47,7 +47,7 @@ class Arvore_b:
         :param pagina_a_dividir: Página que será dividida
         :return: 2 páginas, uma contendo os valores menores e a outra contendo os valores maiores
         """
-        valores_menores = pagina_a_dividir[:len(pagina_a_dividir) // 2]  # Os valores menores pega metade da página
+        valores_menores = pagina_a_dividir[:len(pagina_a_dividir) // 2]  # Os valores menores pegam metade da página
         for c in range(self._quantidade_maxima_de_celulas_por_pagina - len(valores_menores)):
             valores_menores.append(Celula(-inf))
         valores_menores.append(Celula(inf))
@@ -76,22 +76,32 @@ class Arvore_b:
             celula_que_vai_pra_cima = pagina_valores_maiores.pop(
                 pagina_valores_maiores.index(pagina_valores_maiores.maior_valor))
             pagina_valores_maiores.inserir_celula(Celula(valor))
-        if not pagina_a_dividir.tem_pagina_acima:
+        if not pagina_a_dividir.tem_pagina_acima:  # Se não tem página a cima
             self.raiz = self._criar_nova_pagina_com_um_elemento(celula_que_vai_pra_cima, pagina_valores_menores,
                                                                 pagina_valores_maiores)
-        else:
-            for celula in pagina_a_dividir:
-                if celula.ponteiro.celula_cima:
-                    try:
-                        celula.ponteiro.celula_cima.my_page.inserir_celula_e_atualizar_ref_com_novas_paginas(celula_que_vai_pra_cima, pagina_valores_menores, pagina_valores_maiores)
-                        break
-                    except MemoryError:
-                        pass # Arrumar aqui
+        else:  # Se tem página a cima
+            for celula in pagina_a_dividir:  # Para cada célula na página que foi dividia
+                if celula.ponteiro.celula_cima:  # Se a célula está apontando para alguma célula acima
+                    try:  # Tente
+                        celula.ponteiro.celula_cima.my_page.inserir_celula_e_atualizar_ref_com_novas_paginas(
+                            celula_que_vai_pra_cima, pagina_valores_menores, pagina_valores_maiores)
+                        break  # Saia do laço
+                    except MemoryError:  # Exceto se essa página já estiver cheia
+                        self._dividir_pagina(celula.ponteiro.celula_cima.my_page)  # Propaga a árvore para cima
 
     def _criar_nova_pagina_com_um_elemento(self, celula_que_vai_pra_cima, pagina_valores_menores,
                                            pagina_valores_maiores):
-        pagina_nova = Page(self._quantidade_maxima_de_celulas_por_pagina)
-        celula_que_vai_pra_cima.ponteiro.celula_baixo = pagina_valores_menores
-        pagina_nova.inserir_celula(celula_que_vai_pra_cima)
-        pagina_nova[-1].ponteiro.celula_baixo = pagina_valores_maiores
-        return pagina_nova
+        """
+        Cria uma nova página com o elemento que vai para cima atualizando os seus ponteiros.
+        :param celula_que_vai_pra_cima: célula que irá subir de nível.
+        :param pagina_valores_menores: página de valores menores da página dividida.
+        :param pagina_valores_maiores: página de valores maiores da página dividida.
+        :return: Page
+        """
+        pagina_nova = Page(self._quantidade_maxima_de_celulas_por_pagina)  # Cria uma nova página
+        celula_que_vai_pra_cima.ponteiro.celula_baixo = pagina_valores_menores  # A celula que vai pra cima aponta
+        # para os valores menores
+        pagina_nova.inserir_celula(celula_que_vai_pra_cima)  # Insere na nova página a celula que vai para cima
+        pagina_nova[-1].ponteiro.celula_baixo = pagina_valores_maiores  # Os valores maiores são apontados pelo
+        # último ponteiro
+        return pagina_nova  # Retorna a página nova com o novo elemento com as referências atualizadas
