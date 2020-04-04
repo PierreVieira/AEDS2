@@ -33,6 +33,15 @@ class Tree_b:
         if node > page[-1]:  # Se o nó é maior que o último elemento da página
             if page[-1].right:  # Se tem página à direita
                 return self._insert_recursive(node, page[-1].right)  # Desça pela página da direita
+        self._insercao_definida(node, page)  # Faça uma inserção do nó na página definida
+
+    def _insercao_definida(self, node: Node, page: Page):
+        """
+        Após a inserção recursiva já ter sido executada, esse método irá finalmente inserir o nó na árvore
+        :param node: nó que será inserido
+        :param page: página em que irá ocorrer a inserção
+        :return: None
+        """
         try:  # Tente
             page.inserir_elemento(node)  # Inserir o nó na página recorrente
         except MemoryError:  # Exceto se ela já estiver cheia
