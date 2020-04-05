@@ -25,15 +25,33 @@ class Tree_b:
         for no_pagina in page:  # Para cada nó na página recorrente
             if node < no_pagina:  # Se o nó a ser inserido é menor que o nó recorrente
                 if no_pagina.left:  # Se tem página à esquerda
-                    return self._insert_recursive(node, no_pagina.left)  # Faça uma chamada recursiva passando a
-                    # página da esquerda
-                break  # Se não tem nó à esquerda saia do laço
+                    return self._decida_oq_fazer_se_tiver_referencia_a_esquerda_na_insercao_recursiva(no_pagina, node, page)
+                break  # Se não referência para a esquerda, saia do laço
             elif no_pagina == node:  # Se o nó recorrente é igual o nó a ser inserido
                 return None  # Saia da função (elemento já está na árvore)
         if node > page[-1]:  # Se o nó é maior que o último elemento da página
             if page[-1].right:  # Se tem página à direita
                 return self._insert_recursive(node, page[-1].right)  # Desça pela página da direita
-        self._insercao_definida(node, page)  # Faça uma inserção do nó na página definida
+        return self._insercao_definida(node, page)  # Faça uma inserção do nó na página definida
+
+    def _decida_oq_fazer_se_tiver_referencia_a_esquerda_na_insercao_recursiva(self, no_pagina: Node, node: Node,
+                                                                              page: Page):
+        """
+        Essa função é chamada dentro do for da insert_recursive. Essa situação ocorre em uma determinada situação em que
+        existe referência para o nó à esquerda do nó que está sendo percorrido pelo for (no_pagina) da referida função
+        :param no_pagina: nó que está sendo percorrido por um for
+        :param node: nó que será inserido na árvore
+        :param page: página recorrente da função recursiva insert_recursive
+        :return: None
+        """
+        if no_pagina.left.pode_inserir_elemento(node):  # Se pode inserir elemento na esquerda
+            return self._insert_recursive(node, no_pagina.left)  # Faça uma chamada recursiva passando a
+            # página da esquerda
+        else:  # Se não pode inserir na esquerda
+            if no_pagina.right is None:  # Se não tem página à direita
+                nova_pagina = Page(page.maximo_elementos)  # Crie uma nova página
+                no_pagina.right = nova_pagina  # Associe o apontador direito à nova página criada
+            return self._insert_recursive(node, no_pagina.right)  # Insira na página à direita
 
     def _insercao_definida(self, node: Node, page: Page):
         """
@@ -53,24 +71,24 @@ class Tree_b:
         :param page_to_division: página que irá ser dividida
         :return: None
         """
-        pagina_valores_minimos, pagia_valores_maximos = self._dividir_pagina(page_to_division)  # Pega as duas páginas
-        if node < pagia_valores_maximos[0]:  # Se o nó é menor que o primeiro elemento da página com os maiores valores
-            pagina_valores_minimos.inserir_elemento(node) # O nó que iria ser inserido é inserido junto aos menores
+        pagina_valores_minimos, pagina_valores_maximos = self._dividir_pagina(page_to_division)  # Pega as duas páginas
+        if node < pagina_valores_maximos[0]:  # Se o nó é menor que o primeiro elemento da página com os maiores valores
+            pagina_valores_minimos.inserir_elemento(node)  # O nó que iria ser inserido é inserido junto aos menores
             no_q_vai_subir = pagina_valores_minimos.pop()  # O nó que vai subir é o último nó dos valores mínimos
         else:  # Senão (se ele é maior)
-            pagia_valores_maximos.inserir_elemento(node)  # O nó que iria ser inserido é inserido junto aos maiores
-            no_q_vai_subir = pagia_valores_maximos.pop(0)  # O nó que vai subir é o primeiro nó dos valores máximos
+            pagina_valores_maximos.inserir_elemento(node)  # O nó que iria ser inserido é inserido junto aos maiores
+            no_q_vai_subir = pagina_valores_maximos.pop(0)  # O nó que vai subir é o primeiro nó dos valores máximos
         if page_to_division.apontada_por is None:  # Se a página não estiver sendo apontada por nenhum nó
-            self._change_root(no_q_vai_subir, pagina_valores_minimos, pagia_valores_maximos)  # Mude a raíz da árvore
+            self._change_root(no_q_vai_subir, pagina_valores_minimos, pagina_valores_maximos)  # Mude a raíz da árvore
         else:  # Senão
             no_q_vai_subir.left = pagina_valores_minimos  # O apontador esquerdo nó que sobe aponta para a página de
             # valores mínimos
             page_to_division.apontada_por.my_page.inserir_elemento(no_q_vai_subir)  # A página que apontava para a
             # página dividia tem como um dos seues elementos o nó que sobe
-            page_to_division.apontada_por.my_page.alocar_pagina(pagia_valores_maximos)  # A página que apontava para
+            page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava para
             # a página dividida tem a responsabilidade de fazer com que um nó aponte para a página de valores maiores
 
-    def _dividir_pagina(self, page):
+    def _dividir_pagina(self, page) -> (Page, Page):
         """
         :param page: página que será dividia
         :return: página com os valores menores e uma outra página com os valores maiores

@@ -1,9 +1,27 @@
 class Node:
     def __init__(self, value, right=None, left=None, my_page=None):
         self.value = value
-        self.right = right
-        self.left = left
+        self._right = right
+        self._left = left
         self.my_page = my_page
+
+    @property
+    def left(self):
+        return self._left
+
+    @left.setter
+    def left(self, value):
+        self._left = value
+        value.apontada_por = self
+
+    @property
+    def right(self):
+        return self._right
+
+    @right.setter
+    def right(self, value):
+        self._right = value
+        value.apontada_por = self
 
     def __eq__(self, other):
         if type(other) == Node:
@@ -21,7 +39,7 @@ class Node:
         return self.value > other
 
     def __str__(self):
-        return str(self.value)
+        return f'{str(self.value)}'
 
     def __repr__(self):
         return self.__str__()
