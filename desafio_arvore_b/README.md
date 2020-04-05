@@ -11,7 +11,7 @@ Para saber mais detalhes sobre clique [aqui](https://pt.wikipedia.org/wiki/%C3%8
 <b>-> Operações incorporadas</b>
 
 - Busca
-- Inserção (incompleta até o momento, quase 100% funcional)
+- Inserção
 - Remoção (não feita até o momento)
 - Impressão (não feita até o momento)
 - Identificação de nível - tanto nó quanto página (não feito até o momento)
