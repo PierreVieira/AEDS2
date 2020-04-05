@@ -9,9 +9,10 @@ from desafio_arvore_b.tree_b.pagina import Page
 
 class Tree_b:
     def __init__(self, maximo_elementos_pagina, root=None, pagina_da_raiz: Page = None):
+        if pagina_da_raiz is None:
+            pagina_da_raiz = Page(maximo_elementos_pagina)
         if root is not None:
             pagina_da_raiz.inserir_elemento(Node(root))
-        pagina_da_raiz.maximo_elementos = maximo_elementos_pagina
         self.root = pagina_da_raiz
 
     def insert(self, value):
