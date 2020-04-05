@@ -19,12 +19,14 @@ class Page:
             raise MemoryError('Página cheia')
 
     def alocar_pagina(self, page):
-        primeiro_elemento_da_pagina_a_ser_inserida = page[0]  # Pega o primeiro elemento da página
+        """
+        :param page: página que será alocada na árvore, por meio de uma referenciação de algum nó definido neste método
+        :return: True se a página foi inserida com sucesso. KeyError caso contrário.
+        """
         for no in self._lista_elementos:  # Para cada nó na lista de elementos
-            if no > primeiro_elemento_da_pagina_a_ser_inserida:  # Se o nó é maior que o primeiro elemento
-                no.left = page  # A referência esquerda desse nó pega a página passada como parâmetro
-                self._atualizar_referencias()  # Atualize todas as referências da página
-                return None  # Saia do método
+            if no.right is None:
+                no.right = page
+                return True
         raise KeyError('Não há nenhum apontador adequado para a página informada')  # Não foi possível alocar a página
 
     def pode_inserir_elemento(self, valor):

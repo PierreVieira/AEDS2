@@ -51,6 +51,8 @@ class Tree_b:
             if no_pagina.right is None:  # Se não tem página à direita
                 nova_pagina = Page(page.maximo_elementos)  # Crie uma nova página
                 no_pagina.right = nova_pagina  # Associe o apontador direito à nova página criada
+            elif node < no_pagina:  # Se o nó é menor que o nó da página recorrente
+                return None  # Retorne None (o nó não deve ser inserido na árvore)
             return self._insert_recursive(node, no_pagina.right)  # Insira na página à direita
 
     def _insercao_definida(self, node: Node, page: Page):

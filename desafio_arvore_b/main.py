@@ -12,7 +12,7 @@ def teste1():
 
 def teste2():
     arvore_b = Tree_b(11, 4)
-    for n in [8, 11, 27, 31, 25, 16, 48]:
+    for n in [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63]:
         arvore_b.insert(n)
     pass
 
