@@ -81,6 +81,14 @@ class Page:
         Atualiza as referências dos ponteiros presentes nos nós da página.
         :return: None
         """
+        self._atualizar_filhos()
+        self._atualizar_irmaos()
+
+    def _atualizar_filhos(self):
+        """
+        Atualiza os filhos dos nós da página. Ou seja, atualiza as págians filhas da página atual.
+        :return: None
+        """
         for c in range(len(self._lista_elementos) - 1):
             if self._lista_elementos[c + 1].left:  # Se tem apontador à esquerda do próximo nó:
                 self._lista_elementos[c].right = self._lista_elementos[c + 1].left  # O ponteiro da direita recebe o
@@ -88,7 +96,6 @@ class Page:
             else:  # Se não tiver
                 self._lista_elementos[c + 1].left = self._lista_elementos[c].right  # O próximo ponteiro da esquerda
                 # vira o ponteiro atual da direita
-        self._atualizar_irmaos()
 
     def _atualizar_irmaos(self):
         """
