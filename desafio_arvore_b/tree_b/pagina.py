@@ -37,6 +37,7 @@ class Page:
         for no in self._lista_elementos:  # Para cada nó na lista de elementos
             if no.right is None:
                 no.right = page
+                self._atualizar_referencias()
                 return True
         raise KeyError('Não há nenhum apontador adequado para a página informada')  # Não foi possível alocar a página
 
@@ -45,11 +46,11 @@ class Page:
         :param valor: valor a ser inserido na página.
         :return: True se o elemento pode ser inserido. False se o elemento não pode ser inserido
         """
-        if (self.maximo_elementos - len(self._lista_elementos) > 0) and not self.econtrou(valor):
+        if (self.maximo_elementos - len(self._lista_elementos) > 0) and not self.encontrou(valor):
             return True
         return False
 
-    def econtrou(self, valor):
+    def encontrou(self, valor):
         """
         :param valor: valor a ser pesquisado na página
         :return: True se o elemento está na página. False caso contrário
@@ -80,6 +81,8 @@ class Page:
         for c in range(len(self._lista_elementos) - 1):
             if self._lista_elementos[c + 1].left:  # Se tem apontador à esquerda do próximo nó:
                 self._lista_elementos[c].right = self._lista_elementos[c + 1].left  # O ponteiro da direita recebe o
+                if self._lista_elementos[c + 1].left is None:
+                    self._lista_elementos[c + 1].left = self._lista_elementos[c].right
                 # próximo ponteiro da esquerda
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):

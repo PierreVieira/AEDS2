@@ -34,7 +34,7 @@ class Tree_b:
         :param no_a_procurar: nó a ser pesquisado na árvore.
         :return: True se o nó procurado está na árvore. False se o nó procurado não está na árvore.
         """
-        if pagina_recorrente.econtrou(no_a_procurar):  # Se a página tem o nó que estou procurando
+        if pagina_recorrente.encontrou(no_a_procurar):  # Se a página tem o nó que estou procurando
             return True  # Retorne verdadeiro (elemento encontrado)
         for no_recorrente in pagina_recorrente:  # Para cada nó na página recorrente
             if no_a_procurar < no_recorrente:  # Se o nó que estou procurando é menor que o nó recorrente
@@ -82,8 +82,10 @@ class Tree_b:
                 nova_pagina = Page(page.maximo_elementos)  # Crie uma nova página
                 no_pagina.right = nova_pagina  # Associe o apontador direito à nova página criada
             elif node < no_pagina:  # Se o nó é menor que o nó da página recorrente
-                return None  # Retorne None (o nó não deve ser inserido na árvore)
-            return self._insert_recursive(node, no_pagina.right)  # Insira na página à direita
+                if no_pagina.left.encontrou(node):  # Se a página da esquerda já tem o nó
+                    return None  # Retorne None (o nó não deve ser inserido na árvore)
+                return self._insert_recursive(node, no_pagina.left)  # Desça pela esquerda
+            return self._insert_recursive(node, no_pagina.right)  # Desça pela direita
 
     def _insercao_definida(self, node: Node, page: Page):
         """
@@ -115,10 +117,14 @@ class Tree_b:
         else:  # Senão
             no_q_vai_subir.left = pagina_valores_minimos  # O apontador esquerdo nó que sobe aponta para a página de
             # valores mínimos
-            page_to_division.apontada_por.my_page.inserir_elemento(no_q_vai_subir)  # A página que apontava para a
-            # página dividia tem como um dos seues elementos o nó que sobe
-            page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava para
-            # a página dividida tem a responsabilidade de fazer com que um nó aponte para a página de valores maiores
+            try:  # Tente
+                page_to_division.apontada_por.my_page.inserir_elemento(no_q_vai_subir)  # A página que apontava para a página dividia tem como um dos seues elementos o nó que sobe
+            except MemoryError:  # Exceto se a página estiver cheia
+                self._new_page(no_q_vai_subir, page_to_division.apontada_por.my_page)  # Crie uma nova página
+                no_q_vai_subir.right = None
+                print()
+            finally:
+                page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava para a página dividida tem a responsabilidade de fazer com que um nó aponte para a página de valores maiores
 
     def _dividir_pagina(self, page) -> (Page, Page):
         """

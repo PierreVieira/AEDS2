@@ -17,7 +17,8 @@ class Node:
     @left.setter
     def left(self, value):
         self._left = value
-        value.apontada_por = self
+        if value is not None:
+            value.apontada_por = self
 
     @property
     def right(self):
@@ -26,7 +27,13 @@ class Node:
     @right.setter
     def right(self, value):
         self._right = value
-        value.apontada_por = self
+        if value is not None:
+            value.apontada_por = self
+        else:
+            try:
+                self.my_page[self.my_page.index(self) + 1].left = None
+            except IndexError:
+                pass
 
     def __eq__(self, other):
         if type(other) == Node:
