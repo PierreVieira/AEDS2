@@ -1,3 +1,8 @@
+"""
+Autor: Pierre Vieira
+Github: https://github.com/PierreVieira/LAEDS_II/tree/master/desafio_arvore_b
+"""
+
 from desafio_arvore_b.tree_b.no import Node
 from desafio_arvore_b.tree_b.pagina import Page
 
@@ -16,6 +21,29 @@ class Tree_b:
         """
         self._insert_recursive(Node(value), self.root)  # Faz uma inserção recursiva do nó
 
+    def find(self, valor):
+        """
+        :param valor: valor a ser pesquisado na árvore.
+        :return: True se o valor procurado está na árvore. False se o valor procurado não está na árvore.
+        """
+        return self._find(Node(valor), self.root)
+
+    def _find(self, no_a_procurar: Node, pagina_recorrente: Page):
+        """
+        :param no_a_procurar: nó a ser pesquisado na árvore.
+        :return: True se o nó procurado está na árvore. False se o nó procurado não está na árvore.
+        """
+        if pagina_recorrente.econtrou(no_a_procurar):  # Se a página tem o nó que estou procurando
+            return True  # Retorne verdadeiro (elemento encontrado)
+        for no_recorrente in pagina_recorrente:  # Para cada nó na página recorrente
+            if no_a_procurar < no_recorrente:  # Se o nó que estou procurando é menor que o nó recorrente
+                if no_recorrente.left:  # Se o nó recorrente possui apontador à esquerda
+                    return self._find(no_a_procurar, no_recorrente.left)  # Desça pela esquerda
+        if no_a_procurar > pagina_recorrente[-1]:  # Se o nó que estou pesquisando é maior que o último nó da página
+            if pagina_recorrente[-1].right:  # Se o último nó da direita tem apontador à direita
+                return self._find(no_a_procurar, pagina_recorrente[-1].right)  # Desça pela direita
+        return False  # Retorne falso  (elemento não encontrado)
+
     def _insert_recursive(self, node: Node, page: Page):
         """
         :param node: nó a ser inserido na árvore e, consequentemente, em uma página
@@ -25,7 +53,8 @@ class Tree_b:
         for no_pagina in page:  # Para cada nó na página recorrente
             if node < no_pagina:  # Se o nó a ser inserido é menor que o nó recorrente
                 if no_pagina.left:  # Se tem página à esquerda
-                    return self._decida_oq_fazer_se_tiver_referencia_a_esquerda_na_insercao_recursiva(no_pagina, node, page)
+                    return self._decida_oq_fazer_se_tiver_referencia_a_esquerda_na_insercao_recursiva(no_pagina, node,
+                                                                                                      page)
                 break  # Se não referência para a esquerda, saia do laço
             elif no_pagina == node:  # Se o nó recorrente é igual o nó a ser inserido
                 return None  # Saia da função (elemento já está na árvore)
@@ -95,7 +124,7 @@ class Tree_b:
         :param page: página que será dividia
         :return: página com os valores menores e uma outra página com os valores maiores
         """
-        valores_minimos, valores_maximos = page[:len(page) // 2], page[len(page) // 2:]
+        valores_minimos, valores_maximos = page[:len(page) // 2], page[len(page) // 2:]  # Faz um slice na página
         pagina_valores_minimos, pagina_valores_maximos = Page(page.maximo_elementos), Page(page.maximo_elementos)
         pagina_valores_minimos.lista_elementos, pagina_valores_maximos.lista_elementos = valores_minimos, valores_maximos
         return pagina_valores_minimos, pagina_valores_maximos

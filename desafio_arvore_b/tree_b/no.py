@@ -1,3 +1,8 @@
+"""
+Autor: Pierre Vieira
+Github: https://github.com/PierreVieira/LAEDS_II/tree/master/desafio_arvore_b
+"""
+
 class Node:
     def __init__(self, value, right=None, left=None, my_page=None):
         self.value = value

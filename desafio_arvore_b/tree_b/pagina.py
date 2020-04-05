@@ -1,3 +1,8 @@
+"""
+Autor: Pierre Vieira
+Github: https://github.com/PierreVieira/LAEDS_II/tree/master/desafio_arvore_b
+"""
+
 from typing import List
 
 from desafio_arvore_b.tree_b.no import Node
@@ -10,18 +15,24 @@ class Page:
         self.apontada_por = apontada_por
 
     def inserir_elemento(self, no: Node):
-        if self.pode_inserir_elemento(no):
-            no.my_page = self
-            self._lista_elementos.append(no)
-            self._lista_elementos.sort(key=lambda node: node.value)
-            self._atualizar_referencias()
-        else:
-            raise MemoryError('Página cheia')
+        """
+        :param no: nó a ser inserido na página
+        :return: None
+        :raise: MemoryError no caso da página já estar cheia
+        """
+        if self.pode_inserir_elemento(no):  # Se o nó pode ser inserdio na página
+            no.my_page = self  # O nó entende que está nessa página a partir de agora
+            self._lista_elementos.append(no)  # A lista de elementos recebe o nó como um de seus elementos
+            self._lista_elementos.sort(key=lambda node: node.value)  # Ordena a lista de nós
+            self._atualizar_referencias()  # Atualiza as referências dos ponteiros
+        else:  # Se o nó não pode ser inserido
+            raise MemoryError('Página cheia')  # MemoryError. A memória da página está cheia.
 
     def alocar_pagina(self, page):
         """
         :param page: página que será alocada na árvore, por meio de uma referenciação de algum nó definido neste método
-        :return: True se a página foi inserida com sucesso. KeyError caso contrário.
+        :return: True se a página foi inserida com sucesso.
+        :raise: KeyError no caso em que a página não pode ser alocada.
         """
         for no in self._lista_elementos:  # Para cada nó na lista de elementos
             if no.right is None:
@@ -30,9 +41,20 @@ class Page:
         raise KeyError('Não há nenhum apontador adequado para a página informada')  # Não foi possível alocar a página
 
     def pode_inserir_elemento(self, valor):
-        if (self.maximo_elementos - len(self._lista_elementos) > 0) and not self._busca_binaria(valor):
+        """
+        :param valor: valor a ser inserido na página.
+        :return: True se o elemento pode ser inserido. False se o elemento não pode ser inserido
+        """
+        if (self.maximo_elementos - len(self._lista_elementos) > 0) and not self.econtrou(valor):
             return True
         return False
+
+    def econtrou(self, valor):
+        """
+        :param valor: valor a ser pesquisado na página
+        :return: True se o elemento está na página. False caso contrário
+        """
+        return self._busca_binaria(valor)
 
     def pop(self, index=None):
         """
@@ -51,9 +73,14 @@ class Page:
         return self._lista_elementos.index(element)
 
     def _atualizar_referencias(self):
+        """
+        Atualiza as referências dos ponteiros presentes nos nós da página.
+        :return: None
+        """
         for c in range(len(self._lista_elementos) - 1):
             if self._lista_elementos[c + 1].left:  # Se tem apontador à esquerda do próximo nó:
-                self._lista_elementos[c].right = self._lista_elementos[c + 1].left
+                self._lista_elementos[c].right = self._lista_elementos[c + 1].left  # O ponteiro da direita recebe o
+                # próximo ponteiro da esquerda
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):
         """
@@ -87,13 +114,6 @@ class Page:
             no.my_page = self  # Atualize a página em que o nó da lista informada se encontra
             lista_atualizada.append(no)  # Insira esse nó na nova lista
         self._lista_elementos = lista_atualizada  # Sobrescreva a lista de elementos
-
-    def __getvalor__(self, index):
-        """
-        :param index: índice do elemento requerido
-        :return: elemento requerido
-        """
-        return self._lista_elementos[index]
 
     def __getitem__(self, index):
         return self._lista_elementos[index]
