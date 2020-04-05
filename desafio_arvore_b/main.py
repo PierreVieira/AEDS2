@@ -28,4 +28,4 @@ def teste_de_busca(arvore):
 
 
 arvore = teste_de_insercao()
-teste_de_busca(arvore)
+print(arvore.conteudo)

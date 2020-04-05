@@ -9,10 +9,13 @@ from desafio_arvore_b.tree_b.no import Node
 
 
 class Page:
-    def __init__(self, maximo_elementos, apontada_por: Node = None):
+    def __init__(self, maximo_elementos, nivel, apontada_por: Node = None):
         self.maximo_elementos = maximo_elementos
         self._lista_elementos: List = []
         self.apontada_por = apontada_por
+        self.nivel = nivel
+        self.brother_right = None  # Página irmã à direita
+        self.brother_left = None  # Página irmã à esquerda
 
     def inserir_elemento(self, no: Node):
         """
@@ -85,6 +88,17 @@ class Page:
             else:  # Se não tiver
                 self._lista_elementos[c + 1].left = self._lista_elementos[c].right  # O próximo ponteiro da esquerda
                 # vira o ponteiro atual da direita
+        self._atualizar_irmaos()
+
+    def _atualizar_irmaos(self):
+        """
+        :return: Atualiza todos os irmãos de todos os filhos dessa página
+        """
+        for node in self:  # Para cada nó nessa página
+            if node.left:  # Se há página à esquerda
+                node.left.brother_right = node.right  # A página à esquerda tem como irmão à direita a página à direita
+                if node.right:  # Se há página à direita
+                    node.right.brother_left = node.left  # A página à direita tem como irmão à esquerda a página à esquerda
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):
         """
@@ -118,6 +132,9 @@ class Page:
             no.my_page = self  # Atualize a página em que o nó da lista informada se encontra
             lista_atualizada.append(no)  # Insira esse nó na nova lista
         self._lista_elementos = lista_atualizada  # Sobrescreva a lista de elementos
+
+    def matar_irmaos(self):
+        self.brother_left, self._brother_right = None, None
 
     def __getitem__(self, index):
         return self._lista_elementos[index]
