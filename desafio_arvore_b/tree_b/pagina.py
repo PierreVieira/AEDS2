@@ -81,9 +81,10 @@ class Page:
         for c in range(len(self._lista_elementos) - 1):
             if self._lista_elementos[c + 1].left:  # Se tem apontador à esquerda do próximo nó:
                 self._lista_elementos[c].right = self._lista_elementos[c + 1].left  # O ponteiro da direita recebe o
-                if self._lista_elementos[c + 1].left is None:
-                    self._lista_elementos[c + 1].left = self._lista_elementos[c].right
                 # próximo ponteiro da esquerda
+            else:  # Se não tiver
+                self._lista_elementos[c + 1].left = self._lista_elementos[c].right  # O próximo ponteiro da esquerda
+                # vira o ponteiro atual da direita
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):
         """

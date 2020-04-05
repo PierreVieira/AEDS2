@@ -18,10 +18,9 @@ def teste_de_insercao1():
 
 
 def teste_de_insercao2():
-    arvore_b = Tree_b(11, 4)
-    for value in [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63]:
+    arvore_b = Tree_b(4, 11)
+    for value in [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63, 20, 35]:
         arvore_b.insert(value)
-    pass
     return arvore_b
 
 
@@ -33,7 +32,7 @@ def mensagem_de_busca(arvore: Tree_b, value):
 
 
 def teste_de_busca(arvore):
-    for value in [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63]:
+    for value in [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63, 20, 35]:
         mensagem_de_busca(arvore, value)
     mensagem_de_busca(arvore, 3)
     mensagem_de_busca(arvore, 88)
@@ -63,10 +62,9 @@ def teste_de_insercao3():
     arvore.root[3].right = pagina5
     arvore.root._atualizar_referencias()
     arvore.insert(20)
+    arvore.insert(35)
     pass
 
-
 # teste_de_insercao1()
-# arvore = teste_de_insercao2()
-# teste_de_busca(arvore)
+arvore = teste_de_insercao2()
 teste_de_insercao3()
