@@ -13,5 +13,5 @@ Para saber mais detalhes sobre clique [aqui](https://pt.wikipedia.org/wiki/%C3%8
 - Busca
 - Inserção
 - Remoção (não feita até o momento)
-- Impressão (não feita até o momento)
+- Impressão
 - Identificação de nível nas páginas
