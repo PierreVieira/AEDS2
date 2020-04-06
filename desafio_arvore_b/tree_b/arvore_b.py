@@ -130,7 +130,6 @@ class Tree_b:
         else:  # Senão (se ele é maior)
             pagina_valores_maximos.inserir_elemento(node)  # O nó que iria ser inserido é inserido junto aos maiores
             no_q_vai_subir = pagina_valores_maximos.pop(0)  # O nó que vai subir é o primeiro nó dos valores máximos
-        print()
         if page_to_division.apontada_por is None:  # Se a página não estiver sendo apontada por nenhum nó
             self._change_root(no_q_vai_subir, pagina_valores_minimos, pagina_valores_maximos)  # Mude a raíz da árvore
         else:  # Senão
@@ -172,19 +171,22 @@ class Tree_b:
         nova_pagina_raiz.inserir_elemento(nova_raiz_valor)  # A nova página raiz insere o nó raiz
         self.root = nova_pagina_raiz  # Muda a raíz da árvore atual
 
+    @property
     def conteudo(self):
         """
         :return: Todo o conteúdo da árvore por nível string
         """
         niveis = self._lista_niveis()  # Recebe uma lista contendo as páginas separadas por nível
+        string_retorno = ''
         for i in range(len(niveis)):
-            print(f'Nível {i + 1} = {niveis[i]}')
+            string_retorno += str(niveis[i])[1:-1].replace(',', '').center(len(str(niveis[-1])))+'\n'
+        return string_retorno[:-1]  # Ignora o último \n no final
 
     def _lista_niveis(self):
         """
         :return: Todo o conteúdo da árvore por nível em formato de lista
         """
-        quantidade_de_niveis = self.qtde_niveis()
+        quantidade_de_niveis = self.qtde_niveis()  # Descobre a quantidade total de níveis da árvore
         lista_niveis = [[] for i in range(quantidade_de_niveis)]
         for i in range(0, quantidade_de_niveis):
             lista_niveis[i].extend(self.paginas_do_nivel(i + 1))
