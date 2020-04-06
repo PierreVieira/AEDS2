@@ -14,8 +14,8 @@ class Page:
         self._lista_elementos: List = []
         self.apontada_por = apontada_por
         self.nivel = nivel
-        self.brother_right = None  # Página irmã à direita
-        self.brother_left = None  # Página irmã à esquerda
+        self._brother_right = None  # Página irmã à direita
+        self._brother_left = None  # Página irmã à esquerda
 
     def inserir_elemento(self, no: Node):
         """
@@ -104,8 +104,10 @@ class Page:
         for node in self:  # Para cada nó nessa página
             if node.left:  # Se há página à esquerda
                 node.left.brother_right = node.right  # A página à esquerda tem como irmão à direita a página à direita
-                if node.right:  # Se há página à direita
-                    node.right.brother_left = node.left  # A página à direita tem como irmão à esquerda a página à esquerda
+        # Fazendo a ponte
+        if self.apontada_por:  # Se a página está sendo apontada por outra página (isso evita problemas com a raíz)
+            if self.lista_elementos[-1].right:  # Se o último nó aponta para uma página à direita
+                self.lista_elementos[-1].right.brother_right = self.brother_right[0].left  # Faça a ponte
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):
         """
@@ -142,6 +144,23 @@ class Page:
 
     def matar_irmaos(self):
         self.brother_left, self._brother_right = None, None
+
+    @property
+    def brother_left(self):
+        return self._brother_left
+
+    @brother_left.setter
+    def brother_left(self, value):
+        self._brother_left = value
+
+    @property
+    def brother_right(self):
+        return self._brother_right
+
+    @brother_right.setter
+    def brother_right(self, value):
+        if value:
+            value._brother_left, self._brother_right = self, value
 
     def __getitem__(self, index):
         return self._lista_elementos[index]

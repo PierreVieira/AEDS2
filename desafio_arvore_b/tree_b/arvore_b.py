@@ -2,6 +2,7 @@
 Autor: Pierre Vieira
 Github: https://github.com/PierreVieira/LAEDS_II/tree/master/desafio_arvore_b
 """
+from typing import List
 
 from desafio_arvore_b.tree_b.no import Node
 from desafio_arvore_b.tree_b.pagina import Page
@@ -129,6 +130,7 @@ class Tree_b:
         else:  # Senão (se ele é maior)
             pagina_valores_maximos.inserir_elemento(node)  # O nó que iria ser inserido é inserido junto aos maiores
             no_q_vai_subir = pagina_valores_maximos.pop(0)  # O nó que vai subir é o primeiro nó dos valores máximos
+        print()
         if page_to_division.apontada_por is None:  # Se a página não estiver sendo apontada por nenhum nó
             self._change_root(no_q_vai_subir, pagina_valores_minimos, pagina_valores_maximos)  # Mude a raíz da árvore
         else:  # Senão
@@ -140,7 +142,6 @@ class Tree_b:
             except MemoryError:  # Exceto se a página estiver cheia
                 self._new_page(no_q_vai_subir, page_to_division.apontada_por.my_page)  # Crie uma nova página
                 no_q_vai_subir.right = None
-                print()
             finally:
                 page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava
                 # para a página dividida tem a responsabilidade de fazer com que um nó aponte para a página de
@@ -152,9 +153,9 @@ class Tree_b:
         :return: página com os valores menores e uma outra página com os valores maiores
         """
         valores_minimos, valores_maximos = page[:len(page) // 2], page[len(page) // 2:]  # Faz um slice na página
-        pagina_valores_minimos, pagina_valores_maximos = Page(page.maximo_elementos, page.nivel + 1), Page(page.maximo_elementos, page.nivel + 1)
+        pagina_valores_minimos, pagina_valores_maximos = Page(page.maximo_elementos, page.nivel + 1), Page(
+            page.maximo_elementos, page.nivel + 1)
         pagina_valores_minimos.lista_elementos, pagina_valores_maximos.lista_elementos = valores_minimos, valores_maximos
-        pagina_valores_minimos.brother_right, pagina_valores_maximos.brother_left = pagina_valores_maximos, pagina_valores_minimos
         return pagina_valores_minimos, pagina_valores_maximos
 
     def _change_root(self, node: Node, pagina_valores_minimos: Page, pagia_valores_maximos: Page):
@@ -171,13 +172,13 @@ class Tree_b:
         nova_pagina_raiz.inserir_elemento(nova_raiz_valor)  # A nova página raiz insere o nó raiz
         self.root = nova_pagina_raiz  # Muda a raíz da árvore atual
 
-    @property
     def conteudo(self):
         """
         :return: Todo o conteúdo da árvore por nível string
         """
         niveis = self._lista_niveis()  # Recebe uma lista contendo as páginas separadas por nível
-        return str(niveis)  # Retorna essa árvore
+        for i in range(len(niveis)):
+            print(f'Nível {i + 1} = {niveis[i]}')
 
     def _lista_niveis(self):
         """
@@ -185,8 +186,7 @@ class Tree_b:
         """
         quantidade_de_niveis = self.qtde_niveis()
         lista_niveis = [[] for i in range(quantidade_de_niveis)]
-        lista_niveis[0].extend(self.root)
-        for i in range(1, quantidade_de_niveis):
+        for i in range(0, quantidade_de_niveis):
             lista_niveis[i].extend(self.paginas_do_nivel(i + 1))
         return lista_niveis
 
@@ -197,17 +197,30 @@ class Tree_b:
         """
         return self._paginas_do_nivel(nivel_de_interesse, self.root)
 
-    def _paginas_do_nivel(self, nivel_de_interesse: int, pagina: Page, lista_de_paginas=None):
+    def _paginas_do_nivel(self, nivel_de_interesse: int, pagina: Page) -> List:
         """
         :param nivel_de_interesse: nível em que estamos pesquisando
         :param pagina: página de recorrência
         :return: Lista de todas as páginas que estão no nível passado como parâmetro
+        :raise: KeyError quando o nível informado pelo usuário não está presente em nenhuma página da árvore
         """
-        if lista_de_paginas is None:
-            lista_de_paginas = []
-        if pagina.nivel == nivel_de_interesse:
-            lista_de_paginas.append(pagina)
-        elif pagina.nivel < nivel_de_interesse:
-            pass
-        else:  # pagina.nivel > nivel_de_interesse
-            return lista_de_paginas
+        if pagina.nivel != nivel_de_interesse:  # Se o nível da página atual é diferente do nível de interesse
+            if pagina[0].left:  # Se o primeiro nó da página aponta para uma página à esquerda
+                return self._paginas_do_nivel(nivel_de_interesse, pagina[0].left)  # Desça pela esquerda
+            else:  # Se não há
+                raise KeyError('Não há uma página chave para os valores com o nível especificado')  # KeyError
+        else:  # Encontramos a página com o nível de interesse
+            return self._todas_as_paginas_irmas(pagina)  # Retorne todas as páginas do nível requisitado
+
+    def _todas_as_paginas_irmas(self, pagina: Page) -> List:
+        """
+        :param pagina: página que irá ser feita o início da pesquisa
+        :return: todas as páginas irmãs desse nível
+        """
+        lista_de_retorno = []  # A lista de retorno começa vazia
+        while True:  # Loop "infinito"
+            lista_de_retorno.append(pagina)  # A lista de retorno armazena a página
+            if pagina.brother_right:  # Se essa página tiver uma irmã à direita
+                pagina = pagina.brother_right  # Ande pela direita
+            else:  # Se não
+                return lista_de_retorno  # Retorne a lista de retorno
