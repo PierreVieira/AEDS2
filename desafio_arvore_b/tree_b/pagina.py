@@ -106,7 +106,7 @@ class Page:
         # Fazendo a ponte
         if self.apontada_por:  # Se a página está sendo apontada por outra página (isso evita problemas com a raíz)
             if self.lista_elementos[-1].right:  # Se o último nó aponta para uma página à direita
-                if self.brother_right:
+                if self.brother_right:  # Se a página atual tem irmã à direita
                     self.lista_elementos[-1].right.brother_right = self.brother_right[0].left  # Faça a ponte
 
     def _busca_binaria(self, no, lista=None, begin=0, end=None):
