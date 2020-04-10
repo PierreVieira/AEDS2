@@ -182,12 +182,16 @@ class Tree_b:
         return string_retorno[:-1]  # Ignora o último \n no final
 
     def _lista_niveis(self):
-        niveis = []
-        pagina = self.root
-        while pagina:
-            niveis.append(self._todas_as_paginas_irmas(pagina))
-            pagina = pagina[0].left
-        return niveis
+        """
+        :return: Todas as páginas da árvore separadas por nível
+        """
+        paginas_separadas_por_niveis = []
+        pagina = self.root  # A primeira página é a raiz
+        while pagina:  # Enquanto houver páginas
+            paginas_separadas_por_niveis.append(self._todas_as_paginas_irmas(pagina))  # Inclua na lista de níveis
+            # todas as páginas do nível da página atual
+            pagina = pagina[0].left  # A próxima página é a que está à esquerda
+        return paginas_separadas_por_niveis  # retorne a lista de páginas
 
     def _todas_as_paginas_irmas(self, pagina: Page) -> List:
         """
