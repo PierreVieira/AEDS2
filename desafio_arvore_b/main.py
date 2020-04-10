@@ -15,7 +15,7 @@ def teste_de_insercao1():
 
 def teste_de_insercao2():
     arvore_b = Tree_b(4, 20)
-    for value in [20, 10, 40, 50, 30, 55, 3, 11, 4, 28, 36, 33, 52, 17, 25, 13, 45, 9]:
+    for value in [20, 10, 40, 50, 30, 55, 3, 11, 4, 28, 36, 33, 52, 17, 25, 13, 45, 9, 43, 8, 48]:
         arvore_b.insert(value)
     return arvore_b
 
