@@ -9,11 +9,10 @@ from desafio_arvore_b.tree_b.no import Node
 
 
 class Page:
-    def __init__(self, maximo_elementos, nivel, apontada_por: Node = None):
+    def __init__(self, maximo_elementos, apontada_por: Node = None):
         self.maximo_elementos = maximo_elementos
         self._lista_elementos: List = []
         self.apontada_por = apontada_por
-        self.nivel = nivel
         self._brother_right = None  # Página irmã à direita
         self._brother_left = None  # Página irmã à esquerda
 
