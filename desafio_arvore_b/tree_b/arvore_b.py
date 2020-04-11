@@ -142,9 +142,12 @@ class Tree_b:
                 self._new_page(no_q_vai_subir, page_to_division.apontada_por.my_page)  # Crie uma nova página
             finally:
                 no_q_vai_subir.right = None
-                page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava
+                try:
+                    page_to_division.apontada_por.my_page.alocar_pagina(pagina_valores_maximos)  # A página que apontava
                 # para a página dividida tem a responsabilidade de fazer com que um nó aponte para a página de
                 # valores maiores
+                except KeyError:
+                    no_q_vai_subir.right = pagina_valores_maximos
 
     def _dividir_pagina(self, page) -> (Page, Page):
         """
