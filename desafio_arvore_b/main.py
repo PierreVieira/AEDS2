@@ -2,7 +2,7 @@
 Autor: Pierre Vieira
 Github: https://github.com/PierreVieira/LAEDS_II/tree/master/desafio_arvore_b
 """
-from random import sample
+from random import shuffle, randint
 
 from desafio_arvore_b.tree_b.arvore_b import Tree_b
 
@@ -26,8 +26,8 @@ def teste_de_busca(arvore, valores_a_serem_pesquisados):
         mensagem_de_busca(arvore, value)
 
 
-arvore1 = teste_de_insercao(4, 11, [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63, 20, 35])
+arvore1 = teste_de_insercao(2, 11, [8, 11, 27, 31, 25, 16, 59, 53, 52, 21, 36, 48, 78, 81, 75, 95, 90, 91, 72, 63, 20, 35])
 print(arvore1.conteudo())
 print('\n\n')
-arvore2 = teste_de_insercao(4, 20, [20, 10, 40, 50, 30, 55, 3, 11, 4, 28, 36, 33, 52, 17, 25, 13, 45, 9, 43, 8, 48])
+arvore2 = teste_de_insercao(2, 20, [20, 10, 40, 50, 30, 55, 3, 11, 4, 28, 36, 33, 52, 17, 25, 13, 45, 9, 43, 8, 48])
 print(arvore2.conteudo())

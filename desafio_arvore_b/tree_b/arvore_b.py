@@ -9,7 +9,8 @@ from desafio_arvore_b.tree_b.pagina import Page
 
 
 class Tree_b:
-    def __init__(self, maximo_elementos_pagina, root=None, pagina_da_raiz: Page = None):
+    def __init__(self, ordem_arvore, root=None, pagina_da_raiz: Page = None):
+        maximo_elementos_pagina = ordem_arvore * 2
         if pagina_da_raiz is None:
             pagina_da_raiz = Page(maximo_elementos_pagina)
         if root is not None:
