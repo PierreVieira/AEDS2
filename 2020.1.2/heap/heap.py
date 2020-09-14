@@ -1,6 +1,3 @@
-from functools import total_ordering
-
-
 class MaxHeap:
     def __init__(self):
         # inicia com o heap com um elemento sentinela (que nunca será acessado)
