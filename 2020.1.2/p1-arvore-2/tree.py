@@ -116,6 +116,7 @@ class Node:
 
     # def sorted_array_to_balanced_tree(self, array: List, start: int, end: int):
     #     return []
+
     def sorted_array_to_balanced_tree(self, array):
         array1, array2 = array[0:len(array) // 2], array[len(array) // 2:len(array)]
         array3 = [array2.pop(0)]
