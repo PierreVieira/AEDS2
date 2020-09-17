@@ -42,19 +42,20 @@ class MaxHeap:
         :return: None
         """
         tamanho_heap = len(self.arr_heap) - 1
-        tamanho_metade_heap = tamanho_heap // 2
-        while True:
-            heap_equilibrado = True
-            for i in range(1, tamanho_metade_heap + 1):
-                if i == tamanho_metade_heap and tamanho_heap % 2 == 0:
-                    pos_filho_maior = 2 * i
-                else:
-                    pos_filho_maior = self.arr_heap.index(max(self.arr_heap[2 * i], self.arr_heap[2 * i + 1]))
-                if self.arr_heap[i] < self.arr_heap[pos_filho_maior]:
-                    heap_equilibrado = False
-                    self.arr_heap[i], self.arr_heap[pos_filho_maior] = self.arr_heap[pos_filho_maior], self.arr_heap[i]
-            if heap_equilibrado:
-                break
+        if tamanho_heap > 2:
+            tamanho_metade_heap = tamanho_heap // 2
+            while True:
+                heap_equilibrado = True
+                for i in range(1, tamanho_metade_heap + 1):
+                    if i == tamanho_metade_heap and tamanho_heap % 2 == 0:
+                        pos_filho_maior = 2 * i
+                    else:
+                        pos_filho_maior = self.arr_heap.index(max(self.arr_heap[2 * i], self.arr_heap[2 * i + 1]))
+                    if self.arr_heap[i] < self.arr_heap[pos_filho_maior]:
+                        heap_equilibrado = False
+                        self.arr_heap[i], self.arr_heap[pos_filho_maior] = self.arr_heap[pos_filho_maior], self.arr_heap[i]
+                if heap_equilibrado:
+                    break
 
     def retira_max(self):
         if len(self.arr_heap) <= 1:
